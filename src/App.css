@@ -1,5 +1,10 @@
 .App {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 80px;
 }
 
 .App-logo {
@@ -38,10 +43,52 @@
 }
 
 a {
-  text-decoration: none;
   color: black;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 button {
   cursor: pointer;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.send-money {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+label {
+  text-align: left;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+input {
+  margin-bottom: 5px;
+}
+
+.connect-btn {
+  margin-top: 30px;
+}
+
+.stats {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  font-size: 1.2em;
+}
+
+.tx-link {
+  margin-top: 20px;
 }

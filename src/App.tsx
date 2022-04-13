@@ -5,11 +5,7 @@ import { ethers } from 'ethers'
 import { RPC_URL } from './constants'
 import json from './contracts/tutorial.json'
 import { Web3ReactProvider } from '@web3-react/core'
-import Web3React from './components/Web3React/Web3React'
-import Web3Modal from './components/Web3Modal/Web3Modal'
 import Solana from './components/Solana/Solana'
-import Web3js from './components/Web3js/Web3js'
-import IPFS from './components/IPFS/IPFS'
 
 interface Props {}
 
@@ -17,7 +13,7 @@ const provider = new ethers.providers.JsonRpcProvider(RPC_URL)
 const myAddress = '0x2cD3d676F4C53D645aa523cadBf00BA049f4E8eB'
 const account2 = '0x2E7b6533641b120E88Bd9d97Aa2D7Fd0091Cf32e'
 
-const Home: React.FC<Props> = (): JSX.Element => {
+export const Home: React.FC<Props> = (): JSX.Element => {
   useEffect(() => {
     const main = async () => {
       // 1_accounts
@@ -234,10 +230,6 @@ export const App: React.FC = (): JSX.Element => {
     <Web3ReactProvider getLibrary={getLibrary}>
       <Routes>
         <Route path="/" element={<Solana />} />
-        <Route path="/web3-react" element={<Web3React />} />
-        <Route path="/web3-modal" element={<Web3Modal />} />
-        <Route path="/web3js" element={<Web3js />} />
-        <Route path="/ipfs" element={<IPFS />} />
       </Routes>
     </Web3ReactProvider>
   )
