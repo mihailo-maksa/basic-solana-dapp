@@ -4,6 +4,7 @@ import {
   Transaction,
   clusterApiUrl,
   SystemProgram,
+  PublicKey,
 } from '@solana/web3.js'
 import { LAMPORTS_PER_SOL } from '../../constants'
 
@@ -20,32 +21,7 @@ const Solana: React.FC<Props> = (): JSX.Element => {
   const network = clusterApiUrl('testnet')
   const connection = new Connection(network, 'confirmed')
 
-  const sendSOL = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault()
-
-      const lamportAmount = parseFloat(amount) * LAMPORTS_PER_SOL
-
-      let tx = new Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: pubkey,
-          toPubkey: pubkey,
-          lamports: lamportAmount,
-        }),
-      )
-
-      tx.feePayer = pubkey
-      const { blockhash } = await connection.getRecentBlockhash()
-      tx.recentBlockhash = blockhash
-
-      const { signature } = await window.solana.signAndSendTransaction(tx)
-      setTxHash(signature)
-      setAmount('')
-      setRecipientAddress('')
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  console.log(pubkey)
 
   const connectWallet = async () => {
     try {
@@ -69,6 +45,35 @@ const Solana: React.FC<Props> = (): JSX.Element => {
     try {
       await window.solana.disconnect()
       setConnected(false)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const sendSOL = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault()
+
+      const lamportAmount = parseFloat(amount) * LAMPORTS_PER_SOL
+
+      let tx = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: pubkey,
+          toPubkey: new PublicKey(recipientAddress),
+          lamports: lamportAmount,
+        }),
+      )
+
+      tx.feePayer = pubkey
+      const { blockhash } = await connection.getRecentBlockhash()
+      tx.recentBlockhash = blockhash
+
+      const { signature } = await window.solana.signAndSendTransaction(tx)
+      setTxHash(signature)
+      setAmount('')
+      setRecipientAddress('')
+
+      await connection.confirmTransaction(signature, 'confirmed')
     } catch (error) {
       console.error(error)
     }
@@ -163,7 +168,7 @@ const Solana: React.FC<Props> = (): JSX.Element => {
           )}
           <a
             href="https://solfaucet.com/"
-            className="link-primary bold mt-2"
+            className="link-primary bold faucet-link"
             target="_blank"
             rel="noopener noreferrer"
           >
