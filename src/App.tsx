@@ -233,10 +233,9 @@ export const App: React.FC = (): JSX.Element => {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Solana />} />
         <Route path="/web3-react" element={<Web3React />} />
         <Route path="/web3-modal" element={<Web3Modal />} />
-        <Route path="/solana" element={<Solana />} />
         <Route path="/web3js" element={<Web3js />} />
         <Route path="/ipfs" element={<IPFS />} />
       </Routes>

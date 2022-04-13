@@ -252,6 +252,32 @@ const Solana: React.FC<Props> = (): JSX.Element => {
         <strong>Signature: </strong>
         {signature}
       </p>
+      <button
+        type="button"
+        onClick={async () => {
+          const net = clusterApiUrl('testnet')
+          const conn = new Connection(net)
+
+          const { publicKey } = await window.solana.connect()
+          console.log({ amount })
+          let tx = new Transaction().add(
+            SystemProgram.transfer({
+              fromPubkey: publicKey,
+              toPubkey: publicKey,
+              lamports: amount,
+            }),
+          )
+
+          tx.feePayer = publicKey
+          const { blockhash } = await conn.getRecentBlockhash()
+          tx.recentBlockhash = blockhash
+
+          const { signature } = await window.solana.signAndSendTransaction(tx)
+          conn.confirmTransaction(signature, 'singleGossip')
+        }}
+      >
+        Send SOL
+      </button>
     </div>
   )
 }
