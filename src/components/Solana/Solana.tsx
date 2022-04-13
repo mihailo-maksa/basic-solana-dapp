@@ -21,7 +21,35 @@ const Solana: React.FC<Props> = (): JSX.Element => {
   const network = clusterApiUrl('testnet')
   const connection = new Connection(network, 'confirmed')
 
-  console.log(pubkey)
+  const sendSOL = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault()
+
+      setAmount('')
+      setRecipientAddress('')
+
+      const lamportAmount = parseFloat(amount) * LAMPORTS_PER_SOL
+
+      let tx = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: pubkey,
+          toPubkey: new PublicKey(recipientAddress),
+          lamports: lamportAmount,
+        }),
+      )
+
+      tx.feePayer = pubkey
+      const { blockhash } = await connection.getRecentBlockhash()
+      tx.recentBlockhash = blockhash
+
+      const { signature } = await window.solana.signAndSendTransaction(tx)
+      setTxHash(signature)
+
+      await connection.confirmTransaction(signature, 'confirmed')
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const connectWallet = async () => {
     try {
@@ -45,35 +73,8 @@ const Solana: React.FC<Props> = (): JSX.Element => {
     try {
       await window.solana.disconnect()
       setConnected(false)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const sendSOL = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault()
-
-      const lamportAmount = parseFloat(amount) * LAMPORTS_PER_SOL
-
-      let tx = new Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: pubkey,
-          toPubkey: new PublicKey(recipientAddress),
-          lamports: lamportAmount,
-        }),
-      )
-
-      tx.feePayer = pubkey
-      const { blockhash } = await connection.getRecentBlockhash()
-      tx.recentBlockhash = blockhash
-
-      const { signature } = await window.solana.signAndSendTransaction(tx)
-      setTxHash(signature)
       setAmount('')
       setRecipientAddress('')
-
-      await connection.confirmTransaction(signature, 'confirmed')
     } catch (error) {
       console.error(error)
     }
