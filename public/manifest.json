@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Basic Solana Dapp",
+  "name": "Send testnet SOL and USDC to any Solana address & mint your own NFT",
   "icons": [
     {
       "src": "favicon.ico",

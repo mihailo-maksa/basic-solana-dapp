@@ -8,9 +8,9 @@ import {
 } from '@solana/web3.js'
 import { LAMPORTS_PER_SOL } from '../../constants'
 
-interface Props {}
+interface SolanaProps {}
 
-const Solana: React.FC<Props> = (): JSX.Element => {
+const Solana: React.FC<SolanaProps> = (): JSX.Element => {
   const [address, setAddress] = useState<string>('')
   const [pubkey, setPubkey] = useState<any>()
   const [recipientAddress, setRecipientAddress] = useState<string>('')
