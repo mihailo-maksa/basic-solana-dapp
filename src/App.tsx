@@ -1,4 +1,11 @@
-import React, { useEffect } from 'react'
+import React, {
+  useEffect,
+  useState,
+  // eslint-disable-next-line
+  useTransition,
+  // eslint-disable-next-line
+  useDeferredValue,
+} from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import './App.css'
 import { ethers } from 'ethers'
@@ -213,6 +220,55 @@ export const Home: React.FC<Props> = (): JSX.Element => {
   )
 }
 
+const generateProducts = () => {
+  const products = []
+  for (let i = 0; i < 1000; i++) {
+    products.push(`Product ${i + 1}`)
+  }
+  return products
+}
+
+// useTransition
+// 1- Wrap your logic (especially state-updating logic) within
+// startTransition(() => { /* your logic goes here */ }), this
+// will give it a lower priority
+
+const V18: React.FC<Props> = (): JSX.Element => {
+  const [filterTerm, setFilterTerm] = useState<string>('')
+
+  const dummyProducts = generateProducts()
+
+  const filterProducts = (term: string): string[] => {
+    if (!term) return dummyProducts
+    return dummyProducts.filter((product: string): boolean =>
+      product.includes(term),
+    )
+  }
+
+  const filteredProducts = filterProducts(filterTerm)
+
+  return (
+    <div className="App mb-5">
+      <h1 className="bold mb-4">React v18 Practice</h1>
+      <div className="mb-4 form-group">
+        <input
+          type="text"
+          placeholder="Search Products"
+          className="form-control"
+          value={filterTerm}
+          onChange={(e) => setFilterTerm(e.target.value)}
+        />
+      </div>
+
+      {filteredProducts.map(
+        (product: string): JSX.Element => (
+          <p key={product}>{product}</p>
+        ),
+      )}
+    </div>
+  )
+}
+
 export const App: React.FC = (): JSX.Element => {
   useEffect(() => {
     window.addEventListener('load', () => {
@@ -230,6 +286,7 @@ export const App: React.FC = (): JSX.Element => {
     <Web3ReactProvider getLibrary={getLibrary}>
       <Routes>
         <Route path="/" element={<Solana />} />
+        <Route path="/v-18" element={<V18 />} />
       </Routes>
     </Web3ReactProvider>
   )
